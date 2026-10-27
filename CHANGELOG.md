@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.8.0
+## 1.9.0
 - **Unit-test health (`agentforge tests`)**: finds which logic files (controllers, services, utils, hooks, actions, middleware, API routes, Python modules, Flutter data/state layers) have a test, ranked by size with the functions to cover (`.ai/tests.md`); flags committed `.only`/`fit`/`solo` (error), tests with no assertions, empty tests and skipped tests; reads real line coverage from `lcov.info`, `coverage-summary.json` or `coverage.xml`; `minCoverage` in `.ai/config.json` makes low coverage block the gate; recommends a runner when none exists. Supports Jest, Vitest, Mocha, node:test, pytest and flutter_test.
 - **Lines of code and complexity (`agentforge metrics`)**: source, test and comment LOC per service and language, test-to-source ratio, and per-function length, cyclomatic complexity and nesting depth for JavaScript, TypeScript and Python. Soft limits warn; hard limits (2.5x function length, 2x complexity) block the gate. Tune with `"limits"` in `.ai/config.json`.
 - **Software design health (`agentforge design`)**: coupling (afferent/efferent) and stability per module, stable-dependencies violations, god files, high fan-out and fan-in, circular dependencies, plus an **ER data-model diagram** drawn from Mongoose, Prisma, SQLAlchemy and Django models (`.ai/design.md`).

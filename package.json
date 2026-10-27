@@ -1,6 +1,6 @@
 {
-  "name": "agentforge",
-  "version": "1.8.0",
+  "name": "@abhishekchauhan2904/agentforge",
+  "version": "1.9.0",
   "description": "Turn Cursor, OpenCode or Gemini CLI into a structured AI software team with quality gates, rollback and project memory.",
   "type": "module",
   "bin": {
