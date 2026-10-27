@@ -1,0 +1,50 @@
+# Deploy to Azure Container Apps using GitHub OIDC (federated credentials): no client secret is stored.
+# Setup steps: infra/azure/README.md. Configure the repository *variables* (Settings > Variables):
+#   AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, ACR_NAME, APP_NAME, RESOURCE_GROUP
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # lets GitHub request a short-lived Azure token via OIDC
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test --if-present
+      - run: npm run build --if-present
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production   # add required reviewers on this environment for a manual approval step
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push image to ACR
+        run: |
+          az acr build --registry "${{ vars.ACR_NAME }}" --image "${{ vars.APP_NAME }}:${{ github.sha }}" __CONTEXT__
+
+      - name: Deploy new revision
+        run: |
+          az containerapp update \
+            --name "${{ vars.APP_NAME }}" \
+            --resource-group "${{ vars.RESOURCE_GROUP }}" \
+            --image "${{ vars.ACR_NAME }}.azurecr.io/${{ vars.APP_NAME }}:${{ github.sha }}"

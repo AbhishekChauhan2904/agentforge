@@ -1,0 +1,37 @@
+{
+  "name": "agentforge",
+  "version": "1.8.0",
+  "description": "Turn Cursor, OpenCode or Gemini CLI into a structured AI software team with quality gates, rollback and project memory.",
+  "type": "module",
+  "bin": {
+    "agentforge": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "prepublishOnly": "npm test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "cursor",
+    "opencode",
+    "gemini-cli",
+    "workflow",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "prompts": "^2.4.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
